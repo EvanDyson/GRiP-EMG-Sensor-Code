@@ -23,8 +23,8 @@ void setup() {
   delay(1500);
   calibrate();
 
-  //baseSensorValue = calibrated;
-  baseSensorValue = analogRead(sensorPin);
+  baseSensorValue = calibrated;
+  //baseSensorValue = analogRead(sensorPin);
   Serial.println("---------------- Setup done ----------------");
   Serial.print("Base value = ");
   Serial.println(baseSensorValue);
@@ -36,13 +36,16 @@ void setup() {
 }
 
 void calibrate(){
-  for (int i = 0; i < 500; i++){
+  for (int i = 0; i < 100; i++){
     calibration[i] = analogRead(sensorPin);
+    Serial.println(calibration[i]);
   }
-  for (int i = 0; i < 500; i++){
+  for (int i = 0; i < 100; i++){
     calibrated += calibration[i];
   }
-  calibrated /= 500;
+    //Serial.println(calibrated);
+
+  calibrated /= 100;
 }
 
 // PLACE SENSORS WHITE RED BLACK white on muscle, red on muscle head, and black on ground
@@ -51,29 +54,29 @@ void loop() {
   rawSensorValue = analogRead(sensorPin);
   newSensorValue = (analogRead(sensorPin) - baseSensorValue);  // read the sensor value
   
-  
+  /*
   Serial.print("Raw sensor value: ");
   Serial.println(rawSensorValue);
   Serial.print("Base sensor value: ");
   Serial.println(baseSensorValue);
   Serial.print("New Adjusted sensor value: ");
   Serial.println(newSensorValue);          // send the value to the serial monitor
-  
-  if(newSensorValue > 8 && turnCheck == false)
+  */
+  if(newSensorValue > 10 && turnCheck == false)
   {
     SERVO_1.write(170);
     SERVO_2.write(170);
     Serial.println("full turn");
     turnCheck = true;
-    delay(2500);
+    delay(5000);
   } 
-  else if(newSensorValue > 8 && turnCheck == true)
+  else if(newSensorValue > 10 && turnCheck == true)
   {
     SERVO_1.write(10);
     SERVO_2.write(10);
     Serial.println("resetting turn");
     turnCheck = false;
-    delay(2500);
+    delay(5000);
   } 
-  delay(200);
+  delay(500);
 }
